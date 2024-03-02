@@ -21,10 +21,6 @@ mongoose
     console.log('Error Connecting to MongoDB', error);
   });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
 //Import the models
 const Employee = require('../api/models/employee');
 const Attendance = require('../api/models/attendance');
@@ -75,4 +71,12 @@ app.get('/employees', async (req, res) => {
   } catch (err) {
     res.status(500).json({message: 'Failed to get an employee'});
   }
+});
+
+app.get('/', (req, res) => {
+  console.log('hello');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
