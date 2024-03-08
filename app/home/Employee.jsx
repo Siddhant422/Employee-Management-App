@@ -9,6 +9,8 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import SearchResults from '../../components/SearchResults';
+
 
 const Employee = ({navigation}) => {
   const [employees, setEmployees] = useState([]);
@@ -16,7 +18,9 @@ const Employee = ({navigation}) => {
   useEffect(() => {
     const fetchEmployeesData = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:8000/employees');
+        const response = await axios.get(
+          'http://192.168.1.21:8000/employees',
+        );
         setEmployees(response.data);
       } catch (error) {
         console.log('Error in fetching Employees data', error);
@@ -51,9 +55,17 @@ const Employee = ({navigation}) => {
           )}
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('AddDetails') }>
-        <AntDesign name="pluscircle" size={24} color="#0072b1" />
-      </TouchableOpacity>
+      {Employee.length > 0 ? (
+        <SearchResults data={employees} input={input} setInput={setInput} />
+      ) : (
+        <View style={styles.SearchResults}>
+          <Text>No Data</Text>
+          <Text>Press on the Plus button and add your Employee</Text>
+          <TouchableOpacity onPress={navigation.navigate('AddDetails')}>
+            <AntDesign name="pluscircle" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
   },
   thirdComponent: {
     flexDirection: 'row',
+    flex: 1,
     alignItems: 'center',
     marginHorizontal: 7,
     gap: 10,
@@ -84,5 +97,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+  },
+  SearchResults: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
   },
 });
